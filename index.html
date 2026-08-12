@@ -1,19 +1,200 @@
-👑 Royale Shop
-Быстрый и безопасный донат по Тегу Игрока
-УКАЖИТЕ ВАШ ТЕГ ИГРОКА (#TAG):
-🎟️
-Золотой Pass Royale
-599 ₽
-В корзину
-💎🎟️
-Алмазный Pass Royale
-1 199 ₽
-В корзину
-💎
-500 Гемов
-499 ₽
-В корзину
-👑
-2500 Гемов
-2 199 ₽
-В корзину
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clash Royale Shop</title>
+    <!-- Подключаем Telegram Web App SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #121824;
+            color: #ffffff;
+            margin: 0;
+            padding: 15px;
+        }
+
+        h2 { 
+            text-align: center; 
+            margin-bottom: 5px;
+            font-size: 22px;
+            color: #ffcc00;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        p.sub-title {
+            text-align: center;
+            color: #a0aab8;
+            font-size: 13px;
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            background-color: #1c2436;
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #2e3a52;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 12px;
+            color: #ffcc00;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #3d4d6d;
+            background-color: #0d121d;
+            color: #fff;
+            font-size: 14px;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .product-card {
+            background: linear-gradient(145deg, #1e283a, #161e2e);
+            border-radius: 14px;
+            padding: 12px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border: 1px solid #2e3a52;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+        }
+
+        .product-icon { font-size: 42px; margin-bottom: 5px; }
+        .product-title { font-weight: bold; font-size: 14px; margin: 6px 0; color: #ffffff; }
+        .product-price { color: #40c4ff; font-weight: bold; margin-bottom: 12px; font-size: 14px; }
+
+        .btn-add {
+            background: linear-gradient(180deg, #ffb300, #ff8f00);
+            color: #000000;
+            border: none;
+            padding: 10px 12px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.1s ease;
+            box-shadow: 0 3px 0 #b76b00;
+        }
+
+        .btn-add:active { transform: translateY(2px); box-shadow: none; }
+    </style>
+</head>
+<body>
+
+    <h2>👑 Royale Shop</h2>
+    <p class="sub-title">Быстрый и безопасный донат по Тегу Игрока</p>
+
+    <!-- Поле для ввода Тега игрока -->
+    <div class="input-group">
+        <label for="player-tag">УКАЖИТЕ ВАШ ТЕГ ИГРОКА (#TAG):</label>
+        <input type="text" id="player-tag" placeholder="Например: #2PP98LQQ" maxlength="15">
+    </div>
+
+    <div class="products-grid">
+        <!-- Товар 1 -->
+        <div class="product-card">
+            <div>
+                <div class="product-icon">🎟️</div>
+                <div class="product-title">Золотой Pass Royale</div>
+                <div class="product-price">599 ₽</div>
+            </div>
+            <button class="btn-add" onclick="addToCart('1', 'Золотой Pass Royale', 599)">В корзину</button>
+        </div>
+
+        <!-- Товар 2 -->
+        <div class="product-card">
+            <div>
+                <div class="product-icon">💎🎟️</div>
+                <div class="product-title">Алмазный Pass Royale</div>
+                <div class="product-price">1 199 ₽</div>
+            </div>
+            <button class="btn-add" onclick="addToCart('2', 'Алмазный Pass Royale', 1199)">В корзину</button>
+        </div>
+
+        <!-- Товар 3 -->
+        <div class="product-card">
+            <div>
+                <div class="product-icon">💎</div>
+                <div class="product-title">500 Гемов</div>
+                <div class="product-price">499 ₽</div>
+            </div>
+            <button class="btn-add" onclick="addToCart('3', '500 Гемов', 499)">В корзину</button>
+        </div>
+
+        <!-- Товар 4 -->
+        <div class="product-card">
+            <div>
+                <div class="product-icon">👑</div>
+                <div class="product-title">2500 Гемов</div>
+                <div class="product-price">2 199 ₽</div>
+            </div>
+            <button class="btn-add" onclick="addToCart('4', '2500 Гемов', 2199)">В корзину</button>
+        </div>
+    </div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+
+        let cart = [];
+
+        function addToCart(id, name, price) {
+            cart.push({ id, name, price });
+            
+            if (tg.HapticFeedback) {
+                tg.HapticFeedback.impactOccurred('medium');
+            }
+            
+            updateMainButton();
+        }
+
+        function updateMainButton() {
+            if (cart.length > 0) {
+                const total = cart.reduce((sum, item) => sum + item.price, 0);
+                tg.MainButton.setText(`Купить (${total.toLocaleString()} ₽)`);
+                tg.MainButton.show();
+            } else {
+                tg.MainButton.hide();
+            }
+        }
+
+        // Клик по синей кнопке Telegram "Купить"
+        Telegram.WebApp.onEvent('mainButtonClicked', function() {
+            const playerTag = document.getElementById('player-tag').value.trim();
+
+            if (!playerTag) {
+                tg.showAlert('Пожалуйста, введите ваш Тег игрока Clash Royale!');
+                return;
+            }
+
+            const data = {
+                player_tag: playerTag,
+                items: cart,
+                total: cart.reduce((sum, item) => sum + item.price, 0)
+            };
+
+            // Отправляем данные в Python
+            tg.sendData(JSON.stringify(data));
+        });
+    </script>
+</body>
+</html>
